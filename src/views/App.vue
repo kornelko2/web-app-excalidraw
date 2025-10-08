@@ -1,11 +1,13 @@
 <template>
   <div class="wrapper">
+    <!-- eslint-disable vue/attribute-hyphenation -->
     <ExcalidrawComponent
       :theme="theme"
       :initialData="initialData"
       :onChange="onChange"
       :UIOptions="uiOptions"
     >
+      <!-- eslint-enable vue/attribute-hyphenation -->
       <WelcomeScreen />
     </ExcalidrawComponent>
   </div>
@@ -15,7 +17,7 @@
 import { Excalidraw, THEME } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
 import { applyPureReactInVue } from 'veaury'
-import { AppConfigObject, useThemeStore } from '@ownclouders/web-pkg'
+import { type AppConfigObject, useThemeStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 import { computed, unref } from 'vue'
 import WelcomeScreen from '../components/WelcomeScreen.vue'
