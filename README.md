@@ -1,5 +1,7 @@
 # ownCloud Excalidraw
 
+<img width="3114" height="2442" alt="ownCloud Excalidraw extension UI" src="https://github.com/user-attachments/assets/c0da324a-1b1a-4e9e-88ad-64781a018c40" />
+
 ownCloud Excalidraw is an extension for ownCloud Infinite Scale that integrate the [Excalidraw][excalidraw] whiteboard.
 
 > [!NOTE]
