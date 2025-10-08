@@ -18,7 +18,7 @@ Alternatively, you can self-host the fonts. You'll have to copy the content of t
 In that case, you should also set `window.EXCALIDRAW_ASSET_PATH` to the very same path, i.e. `/` in case it's in the root:
 
 ```ts
-window.EXCALIDRAW_ASSET_PATH = "/";
+window.EXCALIDRAW_ASSET_PATH = '/'
 ```
 
 [excalidraw]: https://excalidraw.com/
