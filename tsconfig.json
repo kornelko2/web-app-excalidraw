@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "strict": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitThis": true,
+    "module": "preserve",
+    "sourceMap": true,
+    "lib": ["ESNext", "es2022", "dom", "dom.iterable"]
+  },
+  "exclude": ["node_modules"],
+  "vueCompilerOptions": {
+    "target": 3
+  }
+}

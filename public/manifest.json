@@ -1,0 +1,6 @@
+{
+  "entrypoint": "excalidraw.js",
+  "config": {
+    "assetsPath": ""
+  }
+}
