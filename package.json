@@ -12,7 +12,8 @@
     "lint": "eslint . --ext .vue,.ts,.js",
     "lint:fix": "eslint . --ext .vue,.ts,.js --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "changelog:generate": "changelogen --output CHANGELOG.md"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",

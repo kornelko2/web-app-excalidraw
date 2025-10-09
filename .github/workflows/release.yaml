@@ -44,7 +44,7 @@ jobs:
       - name: Generate changelog and bump version
         id: version
         run: |
-          changelogen --bump --output CHANGELOG.md
+          pnpm changelog:generate --bump
 
           NEW_VERSION="v$(node -p "require('./package.json').version")"
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
