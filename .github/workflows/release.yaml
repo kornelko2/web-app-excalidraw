@@ -34,7 +34,7 @@ jobs:
 
       - name: Create tarball
         run: |
-          tar -czf excalidraw.tar.gz dist/
+          tar -czf excalidraw.tar.gz --transform 's,^dist,excalidraw,' dist/
 
       - name: Configure Git
         run: |
