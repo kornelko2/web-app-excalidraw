@@ -133,7 +133,7 @@ export default defineWebApplication({
       handler: () => {
         void createPersonalBoardAndOpen()
       },
-      priority: 50,
+      priority: 35,
     }
 
     return {
