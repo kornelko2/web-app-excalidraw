@@ -2,12 +2,19 @@ import {
   defineWebApplication,
   AppWrapperRoute,
   type AppMenuItemExtension,
+  EDITOR_MODE_CREATE,
+  resolveFileNameDuplicate,
+  useClientService,
+  useFileActions,
+  useMessages,
+  useRouter,
+  useSpacesStore,
 } from '@ownclouders/web-pkg'
 import { type RouteRecordRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { createRoot } from 'react-dom/client'
 import { setVeauryOptions } from 'veaury'
-import { urlJoin } from '@ownclouders/web-client'
+import { type Resource } from '@ownclouders/web-client'
 import { computed } from 'vue'
 import App from './views/App.vue'
 import Onboarding from './views/Onboarding.vue'
@@ -21,6 +28,11 @@ setVeauryOptions({
 export default defineWebApplication({
   setup() {
     const { $gettext } = useGettext()
+    const clientService = useClientService()
+    const spacesStore = useSpacesStore()
+    const router = useRouter()
+    const { getEditorRouteOpts } = useFileActions()
+    const { showErrorMessage } = useMessages()
 
     const appInfo = {
       id: 'excalidraw',
@@ -64,13 +76,63 @@ export default defineWebApplication({
       },
     ]
 
+    const createPersonalBoardAndOpen = async () => {
+      try {
+        if (!spacesStore.personalSpace) {
+          await router.push({ name: 'excalidraw-welcome' })
+          return
+        }
+
+        const { resource: personalSpaceRoot, children } =
+          await clientService.webdav.listFiles(spacesStore.personalSpace, {
+            fileId: spacesStore.personalSpace.fileId,
+          })
+
+        let fileName = $gettext('New file') + '.excalidraw'
+        const existingResources = children || []
+
+        if (existingResources.some((f: Resource) => f.name === fileName)) {
+          fileName = resolveFileNameDuplicate(
+            fileName,
+            'excalidraw',
+            existingResources
+          )
+        }
+
+        const path = `${personalSpaceRoot.path}/${fileName}`.replace(/\/+/g, '/')
+        const createdFile = await clientService.webdav.putFileContents(
+          spacesStore.personalSpace,
+          { path }
+        )
+
+        const routeOptions = getEditorRouteOpts(
+          'excalidraw',
+          spacesStore.personalSpace,
+          createdFile,
+          EDITOR_MODE_CREATE,
+          undefined
+        )
+
+        await router.push(routeOptions)
+      } catch (error) {
+        console.error(error)
+        showErrorMessage({
+          title: $gettext('Failed to create Excalidraw file'),
+          errors: [error],
+        })
+        await router.push({ name: 'excalidraw-welcome' })
+      }
+    }
+
     const menuItemExtension: AppMenuItemExtension = {
       id: 'com.github.lukashirt.excalidraw.menu-item',
       type: 'appMenuItem',
       label: () => $gettext('Excalidraw'),
       icon: 'resource-type-excalidraw',
       color: '#ffffff',
-      path: urlJoin(appInfo.id, 'welcome'),
+      handler: () => {
+        void createPersonalBoardAndOpen()
+      },
       priority: 50,
     }
 
