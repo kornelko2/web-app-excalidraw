@@ -10,6 +10,7 @@ import {
   useRouter,
   useSpacesStore,
 } from '@ownclouders/web-pkg'
+import './runtimePatch'
 import { type RouteRecordRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { createRoot } from 'react-dom/client'
@@ -66,7 +67,7 @@ export default defineWebApplication({
       {
         // This editor route requires file context from the files app.
         // Keeping it mandatory avoids runtime errors on direct app opens.
-        path: '/:driveAliasAndItem(.*)+',
+        path: '/:driveAliasAndItem(.+)',
         name: 'excalidraw',
         component: AppWrapperRoute(App, { applicationId: appInfo.id }),
         meta: {
@@ -88,7 +89,7 @@ export default defineWebApplication({
             fileId: spacesStore.personalSpace.fileId,
           })
 
-        let fileName = $gettext('New file') + '.excalidraw'
+        let fileName = $gettext('New file.excalidraw')
         const existingResources = children || []
 
         if (existingResources.some((f: Resource) => f.name === fileName)) {
@@ -99,7 +100,8 @@ export default defineWebApplication({
           )
         }
 
-        const path = `${personalSpaceRoot.path}/${fileName}`.replace(/\/+/g, '/')
+        const basePath = personalSpaceRoot.path.replace(/\/+$/, '')
+        const path = `${basePath}/${fileName}`
         const createdFile = await clientService.webdav.putFileContents(
           spacesStore.personalSpace,
           { path }
@@ -118,7 +120,7 @@ export default defineWebApplication({
         console.error(error)
         showErrorMessage({
           title: $gettext('Failed to create Excalidraw file'),
-          errors: [error],
+          errors: [error instanceof Error ? error : new Error(String(error))],
         })
         await router.push({ name: 'excalidraw-welcome' })
       }
