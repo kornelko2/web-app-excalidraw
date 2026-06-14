@@ -2,10 +2,12 @@
   <div class="onboarding">
     <h1 class="title">Excalidraw</h1>
     <p class="body">
-      Open or create a <strong>.excalidraw</strong> file in the Files app to start editing.
+      Open or create a <strong>.excalidraw</strong> file in the Files app to
+      start editing.
     </p>
     <p class="body">
-      You can create one from <strong>Files - New - Excalidraw Whiteboard</strong>.
+      You can create one from
+      <strong>Files - New - Excalidraw Whiteboard</strong>.
     </p>
   </div>
 </template>

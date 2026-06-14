@@ -20,8 +20,13 @@ const patchInsertRule = (): void => {
   const proto = CSSStyleSheet.prototype
   const originalInsertRule = proto.insertRule
 
-  proto.insertRule = function patchedInsertRule(rule: string, index?: number): number {
-    const safeRule = rule.includes('data:font/') ? stripDataFontUrls(rule) : rule
+  proto.insertRule = function patchedInsertRule(
+    rule: string,
+    index?: number
+  ): number {
+    const safeRule = rule.includes('data:font/')
+      ? stripDataFontUrls(rule)
+      : rule
 
     if (typeof index === 'number') {
       return originalInsertRule.call(this, safeRule, index)
@@ -33,7 +38,9 @@ const patchInsertRule = (): void => {
 
 const installStyleObserver = (): void => {
   const scan = (): void => {
-    document.querySelectorAll('style').forEach((node) => sanitizeStyleElement(node))
+    document
+      .querySelectorAll('style')
+      .forEach((node) => sanitizeStyleElement(node))
   }
 
   const observer = new MutationObserver((mutations) => {
@@ -41,7 +48,9 @@ const installStyleObserver = (): void => {
       for (const node of mutation.addedNodes) {
         if (node instanceof Element) {
           sanitizeStyleElement(node)
-          node.querySelectorAll?.('style').forEach((styleNode) => sanitizeStyleElement(styleNode))
+          node
+            .querySelectorAll?.('style')
+            .forEach((styleNode) => sanitizeStyleElement(styleNode))
         }
       }
 
@@ -66,7 +75,9 @@ const installStyleObserver = (): void => {
 if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   patchInsertRule()
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', installStyleObserver, { once: true })
+    document.addEventListener('DOMContentLoaded', installStyleObserver, {
+      once: true,
+    })
   } else {
     installStyleObserver()
   }
