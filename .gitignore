@@ -1,6 +1,9 @@
 node_modules
 dist
 
+# this is a pnpm project; reject the npm lockfile artifact
+package-lock.json
+
 *.log
 .DS_Store
 .envrc
